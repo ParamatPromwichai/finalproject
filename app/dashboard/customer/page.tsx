@@ -1,28 +1,8 @@
-'use client';
-
-import { useEffect } from 'react';
-
-export default function CustomerDashboard() {
-  useEffect(() => {
-    async function checkRole() {
-      const res = await fetch('/api/auth/me', {
-        credentials: 'include',
-      });
-
-      if (!res.ok) {
-        window.location.href = '/login';
-        return;
-      }
-
-      const data = await res.json();
-
-      if (data.role !== 'customer') {
-        window.location.href = '/login';
-      }
-    }
-
-    checkRole();
-  }, []);
-
-  return <h1>Dashboard ลูกค้า</h1>;
+export default function CustomerHome() {
+  return (
+    <div style={{ padding: 20 }}>
+      <h1>หน้าแรก</h1>
+      <p>ยินดีต้อนรับลูกค้า 👋</p>
+    </div>
+  );
 }
