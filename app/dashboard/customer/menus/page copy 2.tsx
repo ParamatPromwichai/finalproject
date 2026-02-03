@@ -7,9 +7,6 @@ type Menu = {
   id: number;
   name: string;
   price: number;
-  image?: string;       // ✅ URL รูปภาพ
-  avg_rating: number;   // ✅ คะแนนเฉลี่ยจาก DB
-  review_count: number; // ✅ จำนวนคนรีวิว
 };
 
 // เพิ่ม Type สำหรับข้อมูลร้านค้า (เพื่อรองรับ QR และบัญชีธนาคาร)
@@ -164,88 +161,36 @@ export default function AllMenusPage() {
       setIsSubmitting(false);
     }
   }
-  const renderStars = (rating: number) => {
-    // แปลงคะแนน 4.5 -> ⭐⭐⭐⭐½ (แบบง่ายๆ ใช้ ★ แทน)
-    const stars = Math.round(rating); // ปัดเศษ
-    return (
-      <span style={{ color: '#FFD700', marginRight: 5 }}>
-        {'★'.repeat(stars)}{'☆'.repeat(5 - stars)}
-      </span>
-    );
-  };
 
   // --- Render ---
   return (
-    <div style={{ padding: '20px 20px 140px 20px', background: '#f5f5f5', minHeight: '100vh' }}>
-      <h1 style={{ marginBottom: 20 }}>🍽️ เมนูทั้งหมด</h1>
+    <div style={{ padding: 16, paddingBottom: 140 }}>
+      <h1>📖 เมนูทั้งหมด</h1>
 
-      {/* ✅ Grid Layout สำหรับ Cards */}
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', // จัด Grid อัตโนมัติตามขนาดจอ
-        gap: '16px' 
-      }}>
-        {menus.map(menu => (
-          <div
-            key={menu.id}
-            style={{
-              background: '#fff',
-              borderRadius: '12px',
-              overflow: 'hidden',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-              display: 'flex',
-              flexDirection: 'column'
-            }}
-          >
-            {/* 1. ส่วนรูปภาพ */}
-            <div style={{ height: '140px', background: '#eee', position: 'relative' }}>
-              {menu.image ? (
-                <img 
-                  src={menu.image} 
-                  alt={menu.name} 
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-                />
-              ) : (
-                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#aaa' }}>
-                   🚫 ไม่มีรูป
-                </div>
-              )}
-            </div>
-
-            {/* 2. ส่วนเนื้อหา */}
-            <div style={{ padding: '12px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-              <div style={{ fontWeight: 'bold', fontSize: '1rem', marginBottom: 4 }}>{menu.name}</div>
-              
-              {/* Rating */}
-              <div style={{ fontSize: '0.8rem', color: '#666', marginBottom: 8 }}>
-                 {renderStars(Number(menu.avg_rating))} 
-                 <span style={{color: '#999'}}>({menu.review_count})</span>
-              </div>
-
-              <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ color: '#2563eb', fontWeight: 'bold', fontSize: '1.1rem' }}>{menu.price} ฿</span>
-                
-                <button 
-                  onClick={() => addToCart(menu)}
-                  style={{
-                    background: '#2563eb',
-                    color: '#fff',
-                    border: 'none',
-                    borderRadius: '50%',
-                    width: '32px',
-                    height: '32px',
-                    cursor: 'pointer',
-                    fontSize: '1.2rem',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center'
-                  }}
-                >
-                  +
-                </button>
-              </div>
-            </div>
+      {/* Menus List */}
+      {menus.map(menu => (
+        <div
+          key={menu.id}
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '10px 0',
+            borderBottom: '1px solid #eee',
+          }}
+        >
+          <div>
+            <div style={{ fontWeight: 'bold' }}>{menu.name}</div>
+            <small style={{ color: '#666' }}>{menu.price} บาท</small>
           </div>
-        ))}
-      </div>
+          <button 
+            onClick={() => addToCart(menu)}
+            style={{ padding: '4px 12px', cursor: 'pointer' }}
+          >
+            ➕ เพิ่ม
+          </button>
+        </div>
+      ))}
 
       {/* ✅ Payment Modal (อัปเดตใหม่) */}
       {showPayment && (
