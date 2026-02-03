@@ -7,12 +7,9 @@ export const db = mysql.createPool({
   password: process.env.DB_PASSWORD!,
   database: process.env.DB_NAME!,
 
-  // ✅ สำคัญที่สุด: SSL
-  ssl: {
-    rejectUnauthorized: true,
-  },
+  // ✅ สำคัญ: บังคับ TLS แบบที่ mysql2 เข้าใจแน่นอน
+  ssl: 'Amazon RDS',
 
   waitForConnections: true,
   connectionLimit: 5,
-  queueLimit: 0,
 });
